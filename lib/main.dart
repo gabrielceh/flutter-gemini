@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gemini_app/config/theme/app_theme.dart';
 
 import 'config/router/app_router.dart';
 
 void main() {
+  AppTheme.setSystemUIOverlayStyle(isDarkmode: true);
+
   runApp(const MainApp());
 }
 
@@ -14,6 +17,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      theme: AppTheme(isDarkmode: true).getTheme(),
     );
   }
 }
