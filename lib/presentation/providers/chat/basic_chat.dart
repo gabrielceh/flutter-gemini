@@ -1,8 +1,9 @@
 import 'package:flutter_chat_core/flutter_chat_core.dart';
-import 'package:gemini_app/presentation/providers/users/user_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
+import 'package:gemini_app/config/gemini/gemini_impl.dart';
+import 'package:gemini_app/presentation/providers/users/user_provider.dart';
 import 'package:gemini_app/presentation/providers/chat/is_gemini_typing.dart';
 
 part "basic_chat.g.dart";
@@ -11,8 +12,12 @@ final uuid = Uuid();
 
 @riverpod
 class BasicChat extends _$BasicChat {
+  final _gemini = GeminiImpl();
+  late User geminiUser;
+
   @override
   List<Message> build() {
+    geminiUser = ref.read(geminiUserProvider);
     return [];
   }
 
@@ -30,15 +35,11 @@ class BasicChat extends _$BasicChat {
     required User user,
     required InMemoryChatController chatController,
   }) async {
-    final message = TextMessage(
-      id: uuid.v4(),
-      authorId: user.id,
-      createdAt: DateTime.now().toUtc(),
+    await _createTextMessage(
       text: text,
+      author: user,
+      chatController: chatController,
     );
-
-    state = [message, ...state];
-    chatController.insertMessage(message);
     _geminiTextResponse(prompt: text, chatController: chatController);
   }
 
@@ -46,28 +47,24 @@ class BasicChat extends _$BasicChat {
     required String prompt,
     required InMemoryChatController chatController,
   }) async {
-    final geminiUser = ref.read(geminiUserProvider);
-
     await _toggleTyping(chatController);
-    await Future.delayed(const Duration(milliseconds: 1000));
-
-    final message = TextMessage(
-      id: uuid.v4(),
-      authorId: geminiUser.id,
-      createdAt: DateTime.now().toUtc(),
-      text: 'Hola desde Gemini ✨',
+    // await Future.delayed(const Duration(seconds: 1));
+    final response = await _gemini.getResponse(prompt);
+    await _createTextMessage(
+      text: response,
+      author: geminiUser,
+      chatController: chatController,
     );
-
-    state = [message, ...state];
-    await chatController.insertMessage(message);
-
     await _toggleTyping(chatController);
   }
+
+  // HELPER METHODS
 
   Future<void> _toggleTyping(InMemoryChatController chatController) async {
     final isGeminiTyping = ref.watch(isGeminiTypingProvider.notifier).state;
 
     if (!isGeminiTyping) {
+      // añadimos un mensaje custom que sera el "typing"
       await chatController.insertMessage(
         CustomMessage(
           id: 'typing-${uuid.v4()}',
@@ -89,5 +86,21 @@ class BasicChat extends _$BasicChat {
         await _toggleTyping(chatController);
       }
     }
+  }
+
+  Future<void> _createTextMessage({
+    required String text,
+    required User author,
+    required InMemoryChatController chatController,
+  }) async {
+    final message = TextMessage(
+      id: uuid.v4(),
+      authorId: author.id,
+      createdAt: DateTime.now().toUtc(),
+      text: text,
+    );
+
+    await chatController.insertMessage(message);
+    state = [message, ...state];
   }
 }
