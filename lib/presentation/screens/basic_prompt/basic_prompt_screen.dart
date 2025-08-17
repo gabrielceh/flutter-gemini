@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flyer_chat_text_stream_message/flyer_chat_text_stream_message.dart';
 import 'package:gemini_app/presentation/providers/chat/basic_chat.dart';
 import 'package:gemini_app/presentation/widgets/widgets.dart';
 import 'package:uuid/uuid.dart';
@@ -22,10 +23,19 @@ class BasicPromptScreen extends ConsumerStatefulWidget {
 class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
   final _chatController = InMemoryChatController();
   bool _isFirstRender = true;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    // vigilamos los cambios del estado para poder actualizar el scroll
+    ref.listenManual(basicChatProvider, (previous, next) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.linearToEaseOut,
+      );
+    });
   }
 
   @override
@@ -43,11 +53,12 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
   @override
   void dispose() {
     _chatController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   void _initializeChat() {
-    final messages = ref.watch(basicChatProvider);
+    final messages = ref.read(basicChatProvider);
     _chatController.insertAllMessages(messages);
   }
 
@@ -90,6 +101,14 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
           onMessageSend: _handleMessageSent,
           theme: ChatTheme.dark(),
           builders: Builders(
+            chatAnimatedListBuilder: (context, itemBuilder) {
+              return ChatAnimatedList(
+                scrollController: _scrollController,
+                itemBuilder: itemBuilder,
+                // shouldScrollToEndWhenAtBottom: false,
+              );
+            },
+            // mensahe cuando no hay mensajes
             emptyChatListBuilder: (context) {
               return Center(child: Text('No hay mensajes'));
             },
@@ -141,6 +160,34 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
                   index: index,
                   isSentByMe: isSentByMe,
                 ),
+
+            // textStreamMessageBuilder:
+            //     (
+            //       context,
+            //       message,
+            //       index, {
+            //       required bool isSentByMe,
+            //       MessageGroupStatus? groupStatus,
+            //     }) {
+            //       // Watch the manager for state updates
+            //       final streamState = context.watch<BasicPromptScreenState>().getState(message.streamId);
+            //       // Return the stream message widget, passing the state
+            //       return FlyerChatTextStreamMessage(
+            //         message: message,
+            //         index: index,
+            //         streamState: streamState,
+            //         chunkAnimationDuration: _kChunkAnimationDuration,
+            //         showTime: false,
+            //         showStatus: false,
+            //         receivedBackgroundColor: Colors.transparent,
+            //         padding: message.authorId == _agent.id
+            //             ? EdgeInsets.zero
+            //             : const EdgeInsets.symmetric(
+            //                 horizontal: 16,
+            //                 vertical: 10,
+            //               ),
+            //       );
+            //     },
           ),
         ),
       ),

@@ -18,7 +18,14 @@ class BasicChat extends _$BasicChat {
   @override
   List<Message> build() {
     geminiUser = ref.read(geminiUserProvider);
-    return [];
+    return [
+      TextMessage(
+        id: '0',
+        authorId: geminiUser.id,
+        createdAt: DateTime.now().toUtc(),
+        text: 'Gemini esta pensando...',
+      ),
+    ];
   }
 
   void addMessage({
@@ -40,7 +47,7 @@ class BasicChat extends _$BasicChat {
       author: user,
       chatController: chatController,
     );
-    _geminiTextResponse(prompt: text, chatController: chatController);
+    _geminiTextResponseStream(prompt: text, chatController: chatController);
   }
 
   Future<void> _geminiTextResponse({
@@ -56,6 +63,30 @@ class BasicChat extends _$BasicChat {
       chatController: chatController,
     );
     await _toggleTyping(chatController);
+  }
+
+  Future<void> _geminiTextResponseStream({
+    required String prompt,
+    required InMemoryChatController chatController,
+  }) async {
+    await _createTextMessage(
+      text: "Gemini esta pensando...",
+      author: geminiUser,
+      chatController: chatController,
+    );
+    _gemini.getResponseStream(prompt).listen((chunk) {
+      if (chunk.isEmpty) return;
+
+      final updatedMessages = [...state];
+      final oldMessage = (updatedMessages.first as TextMessage);
+      final updatedMessage = (updatedMessages.first as TextMessage).copyWith(
+        text: chunk,
+      );
+
+      updatedMessages[0] = updatedMessage;
+      chatController.updateMessage(oldMessage, updatedMessage);
+      state = updatedMessages;
+    });
   }
 
   // HELPER METHODS
