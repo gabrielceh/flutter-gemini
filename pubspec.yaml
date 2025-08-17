@@ -1,5 +1,5 @@
 name: gemini_app
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 publish_to: 'none'
 version: 0.1.0
 
@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   flutter_chat_core: ^2.8.0
   flutter_chat_ui: ^2.9.0
+  flutter_dotenv: ^5.2.1
   flutter_link_previewer: ^4.1.2
   flutter_riverpod: ^2.6.1
   flyer_chat_file_message: ^2.3.1
@@ -34,3 +35,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - .env

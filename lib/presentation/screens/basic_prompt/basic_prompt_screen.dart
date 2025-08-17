@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math'; //TODO: BORRAR solo para random
 
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';

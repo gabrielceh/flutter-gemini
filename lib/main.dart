@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gemini_app/config/theme/app_theme.dart';
 
+import 'package:gemini_app/config/constants/enviroment.dart';
+import 'package:gemini_app/config/theme/app_theme.dart';
 import 'config/router/app_router.dart';
 
-void main() {
+Future<void> main() async {
   AppTheme.setSystemUIOverlayStyle(isDarkmode: true);
+  await Environment.initEnvironment();
 
   runApp(ProviderScope(child: const GeminiApp()));
 }
