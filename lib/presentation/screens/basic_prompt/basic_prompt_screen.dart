@@ -6,6 +6,7 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gemini_app/presentation/providers/chat/basic_chat.dart';
 import 'package:gemini_app/presentation/widgets/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gemini_app/presentation/providers/providers.dart';
@@ -97,8 +98,15 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
           chatController: _chatController,
           currentUserId: user.id,
           resolveUser: _resolveUser,
-          onMessageSend: _handleMessageSent,
+          // onMessageSend: _handleMessageSent,
           theme: ChatTheme.dark(),
+
+          // onAttachmentTap: () async {
+          //   ImagePicker picker = ImagePicker();
+          //   final List<XFile> images = await picker.pickMultiImage(limit: 4);
+          //   if (images.isEmpty) return;
+          //   print(images);
+          // },
           builders: Builders(
             chatAnimatedListBuilder: (context, itemBuilder) {
               return ChatAnimatedList(
@@ -160,33 +168,22 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
                   isSentByMe: isSentByMe,
                 ),
 
-            // textStreamMessageBuilder:
-            //     (
-            //       context,
-            //       message,
-            //       index, {
-            //       required bool isSentByMe,
-            //       MessageGroupStatus? groupStatus,
-            //     }) {
-            //       // Watch the manager for state updates
-            //       final streamState = context.watch<BasicPromptScreenState>().getState(message.streamId);
-            //       // Return the stream message widget, passing the state
-            //       return FlyerChatTextStreamMessage(
-            //         message: message,
-            //         index: index,
-            //         streamState: streamState,
-            //         chunkAnimationDuration: _kChunkAnimationDuration,
-            //         showTime: false,
-            //         showStatus: false,
-            //         receivedBackgroundColor: Colors.transparent,
-            //         padding: message.authorId == _agent.id
-            //             ? EdgeInsets.zero
-            //             : const EdgeInsets.symmetric(
-            //                 horizontal: 16,
-            //                 vertical: 10,
-            //               ),
-            //       );
-            //     },
+            // caja de texto personalizada
+            composerBuilder: (context) {
+              return CustomBottomInput(
+                onSend: (text, {images = const []}) {
+                  final basicChatNotifier = ref.read(
+                    basicChatProvider.notifier,
+                  );
+                  basicChatNotifier.addMessage(
+                    text: text,
+                    user: ref.watch(userProvider),
+                    chatController: _chatController,
+                  );
+                  print(images);
+                },
+              );
+            },
           ),
         ),
       ),
