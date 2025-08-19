@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flyer_chat_text_stream_message/flyer_chat_text_stream_message.dart';
 import 'package:gemini_app/presentation/providers/chat/basic_chat.dart';
 import 'package:gemini_app/presentation/widgets/widgets.dart';
 import 'package:uuid/uuid.dart';

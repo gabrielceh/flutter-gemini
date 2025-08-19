@@ -18,14 +18,7 @@ class BasicChat extends _$BasicChat {
   @override
   List<Message> build() {
     geminiUser = ref.read(geminiUserProvider);
-    return [
-      TextMessage(
-        id: '0',
-        authorId: geminiUser.id,
-        createdAt: DateTime.now().toUtc(),
-        text: 'Gemini esta pensando...',
-      ),
-    ];
+    return [];
   }
 
   void addMessage({
