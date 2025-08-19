@@ -1,4 +1,5 @@
 import 'package:flutter_chat_core/flutter_chat_core.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,9 +25,19 @@ class BasicChat extends _$BasicChat {
   void addMessage({
     required String text,
     required User user,
+    List<XFile> images = const [],
     required InMemoryChatController chatController,
   }) {
-    // TODO: agregar condicion cuando vengan imagenes
+    if (images.isNotEmpty) {
+      _addTextMessageWithImages(
+        text: text,
+        user: user,
+        chatController: chatController,
+        images: images,
+      );
+      return;
+    }
+
     _addTextMessage(text: text, user: user, chatController: chatController);
   }
 
@@ -40,7 +51,36 @@ class BasicChat extends _$BasicChat {
       author: user,
       chatController: chatController,
     );
+
+    // _geminiTextResponse(prompt: text, chatController: chatController);
     _geminiTextResponseStream(prompt: text, chatController: chatController);
+  }
+
+  Future<void> _addTextMessageWithImages({
+    required String text,
+    required User user,
+    required InMemoryChatController chatController,
+    required List<XFile> images,
+  }) async {
+    for (XFile image in images) {
+      await _createImageMessage(
+        image: image,
+        author: user,
+        chatController: chatController,
+      );
+    }
+
+    await _createTextMessage(
+      text: text,
+      author: user,
+      chatController: chatController,
+    );
+
+    await _geminiTextResponseStream(
+      prompt: text,
+      chatController: chatController,
+      images: images,
+    );
   }
 
   Future<void> _geminiTextResponse({
@@ -61,13 +101,14 @@ class BasicChat extends _$BasicChat {
   Future<void> _geminiTextResponseStream({
     required String prompt,
     required InMemoryChatController chatController,
+    List<XFile> images = const [],
   }) async {
     await _createTextMessage(
       text: "Gemini esta pensando...",
       author: geminiUser,
       chatController: chatController,
     );
-    _gemini.getResponseStream(prompt).listen((chunk) {
+    _gemini.getResponseStream(prompt, files: images).listen((chunk) {
       if (chunk.isEmpty) return;
 
       final updatedMessages = [...state];
@@ -122,6 +163,23 @@ class BasicChat extends _$BasicChat {
       authorId: author.id,
       createdAt: DateTime.now().toUtc(),
       text: text,
+    );
+
+    await chatController.insertMessage(message);
+    state = [message, ...state];
+  }
+
+  Future<void> _createImageMessage({
+    required XFile image,
+    required User author,
+    required InMemoryChatController chatController,
+  }) async {
+    final message = ImageMessage(
+      id: uuid.v4(),
+      authorId: author.id,
+      createdAt: DateTime.now().toUtc(),
+      source: image.path,
+      size: await image.length(),
     );
 
     await chatController.insertMessage(message);

@@ -38,14 +38,14 @@ class CustomChatMessage extends StatelessWidget {
       isRemoved: isRemoved,
       groupStatus: groupStatus,
       // Avatar (solo para otros usuarios, no para ti)
-      leadingWidget: isSentByMe || user == null
-          ? null
-          : message.metadata?['type'] != 'typing'
-          ? Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Avatar(userId: user!.id),
-            )
-          : null,
+      // leadingWidget: isSentByMe || user == null
+      //     ? null
+      //     : message.metadata?['type'] != 'typing'
+      //     ? Padding(
+      //         padding: const EdgeInsets.only(right: 10.0),
+      //         child: Avatar(userId: user!.id),
+      //       )
+      //     : null,
 
       // Nombre del usuario (solo para el primer mensaje del grupo)
       topWidget: isSentByMe || user == null

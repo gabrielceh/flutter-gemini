@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gemini_app/config/theme/app_theme.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CustomBottomInput extends StatefulWidget {
@@ -59,33 +60,42 @@ class _CustomBottomInputState extends State<CustomBottomInput> {
     }
 
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // Imágenes adjuntas
-          if (images.isNotEmpty)
-            _ImageAttachments(images: images, onDeleteImage: onDeleteImage),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Imágenes adjuntas
+            if (images.isNotEmpty)
+              _ImageAttachments(images: images, onDeleteImage: onDeleteImage),
 
-          Row(
-            children: [
-              // Botón para adjuntar archivos
-              IconButton(
-                onPressed: onAttachmentPressed,
-                icon: const Icon(Icons.attach_file_outlined),
+            Container(
+              padding: const EdgeInsets.only(bottom: 5, top: 10),
+              decoration: BoxDecoration(color: seedColor),
+              child: Row(
+                children: [
+                  // Botón para adjuntar archivos
+                  IconButton(
+                    onPressed: onAttachmentPressed,
+                    icon: const Icon(Icons.attach_file_outlined),
+                  ),
+                  // Campo de texto expandible
+                  _TextInput(
+                    onTextChanged: onTextChanged,
+                    controller: controller,
+                  ),
+                  // Botón de enviar con ícono de avión
+                  IconButton(
+                    onPressed: text.isEmpty ? null : onSend,
+                    icon: Icon(
+                      Icons.send,
+                      color: text.isEmpty ? Colors.grey : Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              // Campo de texto expandible
-              _TextInput(onTextChanged: onTextChanged, controller: controller),
-              // Botón de enviar con ícono de avión
-              IconButton(
-                onPressed: text.isEmpty ? null : onSend,
-                icon: Icon(
-                  Icons.send,
-                  color: text.isEmpty ? Colors.grey : Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

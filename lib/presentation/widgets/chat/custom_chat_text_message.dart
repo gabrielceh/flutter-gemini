@@ -28,6 +28,17 @@ class CustomChatTextMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
+    final borderRadiusMe = BorderRadius.only(
+      bottomLeft: Radius.circular(12),
+      topLeft: Radius.circular(12),
+      bottomRight: Radius.circular(12),
+    );
+    final borderRadiusNotMe = BorderRadius.only(
+      bottomRight: Radius.circular(12),
+      bottomLeft: Radius.circular(12),
+      topRight: Radius.circular(12),
+    );
+
     return FlyerChatTextMessage(
       message: message,
       index: index,
@@ -37,9 +48,9 @@ class CustomChatTextMessage extends StatelessWidget {
           ? const EdgeInsets.symmetric(horizontal: 16, vertical: 10)
           : EdgeInsets.zero,
       topWidget: isSentByMe || user == null ? null : NameMessage(user: user!),
-      sentBackgroundColor: Colors.purple,
-      receivedBackgroundColor: colors.surfaceContainer,
-      borderRadius: BorderRadius.circular(15),
+      sentBackgroundColor: Colors.purple[900],
+      receivedBackgroundColor: Colors.purple[500],
+      borderRadius: isSentByMe ? borderRadiusMe : borderRadiusNotMe,
     );
   }
 }

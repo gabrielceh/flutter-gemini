@@ -9,7 +9,6 @@ class CustomChatImageMedia extends StatelessWidget {
   final BuildContext context;
   final ImageMessage message;
   final int index;
-  final Animation<double> animation;
   final bool isSentByMe;
   final MessageGroupStatus? groupStatus;
 
@@ -18,7 +17,6 @@ class CustomChatImageMedia extends StatelessWidget {
     required this.context,
     required this.message,
     required this.index,
-    required this.animation,
     required this.isSentByMe,
     this.user,
     this.groupStatus,
@@ -26,12 +24,26 @@ class CustomChatImageMedia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlyerChatImageMessage(
-      message: message,
-      index: index,
-      showTime: false,
-      showStatus: false,
-      topWidget: isSentByMe || user == null ? null : NameMessage(user: user!),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: isSentByMe ? Colors.purple[900] : Colors.purple[500],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FlyerChatImageMessage(
+            message: message,
+            index: index,
+            showTime: false,
+            showStatus: false,
+            topWidget: isSentByMe || user == null
+                ? null
+                : NameMessage(user: user!),
+          ),
+        ),
+      ),
     );
   }
 }

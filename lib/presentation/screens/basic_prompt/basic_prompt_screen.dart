@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gemini_app/config/theme/app_theme.dart';
 import 'package:gemini_app/presentation/providers/chat/basic_chat.dart';
 import 'package:gemini_app/presentation/widgets/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gemini_app/presentation/providers/providers.dart';
@@ -77,14 +77,14 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
   }
 
   // Maneja el envío de mensajes del usuario
-  void _handleMessageSent(String message) async {
-    final basicChatNotifier = ref.read(basicChatProvider.notifier);
-    basicChatNotifier.addMessage(
-      text: message,
-      user: ref.watch(userProvider),
-      chatController: _chatController,
-    );
-  }
+  // void _handleMessageSent(String message) async {
+  //   final basicChatNotifier = ref.read(basicChatProvider.notifier);
+  //   basicChatNotifier.addMessage(
+  //     text: message,
+  //     user: ref.watch(userProvider),
+  //     chatController: _chatController,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +100,7 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
           resolveUser: _resolveUser,
           // onMessageSend: _handleMessageSent,
           theme: ChatTheme.dark(),
+          backgroundColor: seedColor,
 
           // onAttachmentTap: () async {
           //   ImagePicker picker = ImagePicker();
@@ -109,10 +110,13 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
           // },
           builders: Builders(
             chatAnimatedListBuilder: (context, itemBuilder) {
-              return ChatAnimatedList(
-                scrollController: _scrollController,
-                itemBuilder: itemBuilder,
-                // shouldScrollToEndWhenAtBottom: false,
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 60.0),
+                child: ChatAnimatedList(
+                  scrollController: _scrollController,
+                  itemBuilder: itemBuilder,
+                  // shouldScrollToEndWhenAtBottom: false,
+                ),
               );
             },
             // mensahe cuando no hay mensajes
@@ -168,6 +172,21 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
                   isSentByMe: isSentByMe,
                 ),
 
+            imageMessageBuilder:
+                (
+                  context,
+                  message,
+                  index, {
+                  required bool isSentByMe,
+                  MessageGroupStatus? groupStatus,
+                }) => CustomChatImageMedia(
+                  context: context,
+                  message: message,
+                  index: index,
+                  isSentByMe: isSentByMe,
+                  groupStatus: groupStatus,
+                ),
+
             // caja de texto personalizada
             composerBuilder: (context) {
               return CustomBottomInput(
@@ -179,8 +198,8 @@ class BasicPromptScreenState extends ConsumerState<BasicPromptScreen> {
                     text: text,
                     user: ref.watch(userProvider),
                     chatController: _chatController,
+                    images: images,
                   );
-                  print(images);
                 },
               );
             },
