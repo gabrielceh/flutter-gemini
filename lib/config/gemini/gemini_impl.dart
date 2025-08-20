@@ -128,4 +128,29 @@ class GeminiImpl {
       yield buffer;
     }
   }
+
+  // Generacion de imagen
+  Future<String?> imageGeneration(
+    String prompt, {
+    List<XFile> files = const [],
+  }) async {
+    final FormData formData = FormData();
+    formData.fields.add(MapEntry('prompt', prompt));
+
+    for (final file in files) {
+      formData.files.add(
+        MapEntry(
+          'files',
+          await MultipartFile.fromFile(file.path, filename: file.name),
+        ),
+      );
+    }
+    try {
+      final response = await _dio.post('/image-generation', data: formData);
+      return response.data['imageUrl'];
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 }

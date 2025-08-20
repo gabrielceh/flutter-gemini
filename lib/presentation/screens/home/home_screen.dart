@@ -29,6 +29,16 @@ class HomeScreen extends StatelessWidget {
             subtitle: Text('Usando un módelo Flash'),
             onTap: () => context.push('/chat-stream'),
           ),
+
+          ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: Colors.pinkAccent,
+              child: Icon(Icons.person_outlined),
+            ),
+            title: Text('Imagenes'),
+            subtitle: Text('Generación de imágenes con gemini'),
+            onTap: () => context.push('/image-generation'),
+          ),
         ],
       ),
     );
