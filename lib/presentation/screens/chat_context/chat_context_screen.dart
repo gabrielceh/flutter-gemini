@@ -64,7 +64,7 @@ class ChatContextScreenState extends ConsumerState<ChatContextScreen> {
 
   void _initializeChat() {
     final messages = ref.read(chatWithContextProvider);
-    _chatController.insertAllMessages(messages);
+    _chatController.insertAllMessages(messages.reversed.toList());
   }
 
   Future<User> _resolveUser(String userId) async {
@@ -86,7 +86,7 @@ class ChatContextScreenState extends ConsumerState<ChatContextScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Consulta básica'),
+        title: Text('Chat con Gemini'),
         actions: [
           IconButton(
             onPressed: () {
