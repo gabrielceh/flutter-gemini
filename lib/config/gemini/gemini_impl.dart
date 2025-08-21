@@ -22,7 +22,7 @@ class GeminiImpl {
       return response.data;
     } catch (e) {
       print('Error: $e');
-      throw Exception("Can't get Gemini✨ response");
+      return ("Can't get Gemini✨ response");
     }
   }
 
@@ -65,7 +65,7 @@ class GeminiImpl {
       );
     } catch (e) {
       print('Error: $e');
-      throw Exception("Can't get Gemini✨ response");
+      yield ("Can't get Gemini✨ response");
     }
   }
 
@@ -83,7 +83,7 @@ class GeminiImpl {
       );
     } catch (e) {
       print('Error: $e');
-      throw Exception("Can't get Gemini✨ response");
+      yield ("Error al generar la imagen");
     }
   }
 
@@ -94,43 +94,47 @@ class GeminiImpl {
     List<XFile> files = const [],
     Map<String, dynamic> formFields = const {},
   }) async* {
-    //! Multipart
-    final formData = FormData();
-    formData.fields.add(MapEntry('prompt', prompt));
-    for (final entry in formFields.entries) {
-      formData.fields.add(MapEntry(entry.key, entry.value));
-    }
-
-    //! Archivos a subir
-    if (files.isNotEmpty) {
-      for (final file in files) {
-        formData.files.add(
-          MapEntry(
-            'files',
-            await MultipartFile.fromFile(file.path, filename: file.name),
-          ),
-        );
+    try {
+      //! Multipart
+      final formData = FormData();
+      formData.fields.add(MapEntry('prompt', prompt));
+      for (final entry in formFields.entries) {
+        formData.fields.add(MapEntry(entry.key, entry.value));
       }
-    }
 
-    final response = await _dio.post(
-      endpoint,
-      data: formData,
-      options: Options(responseType: ResponseType.stream),
-    );
+      //! Archivos a subir
+      if (files.isNotEmpty) {
+        for (final file in files) {
+          formData.files.add(
+            MapEntry(
+              'files',
+              await MultipartFile.fromFile(file.path, filename: file.name),
+            ),
+          );
+        }
+      }
 
-    final stream = response.data.stream as Stream<List<int>>;
-    String buffer = '';
+      final response = await _dio.post(
+        endpoint,
+        data: formData,
+        options: Options(responseType: ResponseType.stream),
+      );
 
-    await for (final chunk in stream) {
-      final chunkString = utf8.decode(chunk, allowMalformed: true);
-      buffer += chunkString;
-      yield buffer;
+      final stream = response.data.stream as Stream<List<int>>;
+      String buffer = '';
+
+      await for (final chunk in stream) {
+        final chunkString = utf8.decode(chunk, allowMalformed: true);
+        buffer += chunkString;
+        yield buffer;
+      }
+    } catch (e) {
+      yield ("Error inesperado en el chat");
     }
   }
 
   // Generacion de imagen
-  Future<String?> imageGeneration(
+  Future<Map<String, String>> imageGeneration(
     String prompt, {
     List<XFile> files = const [],
   }) async {
@@ -147,10 +151,15 @@ class GeminiImpl {
     }
     try {
       final response = await _dio.post('/image-generation', data: formData);
-      return response.data['imageUrl'];
+      final imageUrl = response.data['imageUrl'];
+      final textResponse = response.data['text'];
+
+      if (imageUrl == '') {
+        return {'text': textResponse, 'imageUrl': ''};
+      }
+      return {'imageUrl': imageUrl, 'text': ''};
     } catch (e) {
-      print('Error: $e');
-      return null;
+      return {'imageUrl': '', 'text': 'Error al generar la imagen'};
     }
   }
 }

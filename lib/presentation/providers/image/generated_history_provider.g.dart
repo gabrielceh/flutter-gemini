@@ -7,12 +7,12 @@ part of 'generated_history_provider.dart';
 // **************************************************************************
 
 String _$generatedImageHistoryHash() =>
-    r'44d6301f66ad3d1f6c02ef7fac7743094fcab488';
+    r'0044195bd6390f00315bbfa3eb7d82b13beac8af';
 
 /// See also [GeneratedImageHistory].
 @ProviderFor(GeneratedImageHistory)
 final generatedImageHistoryProvider =
-    AutoDisposeNotifierProvider<GeneratedImageHistory, List<String>>.internal(
+    NotifierProvider<GeneratedImageHistory, List<String>>.internal(
       GeneratedImageHistory.new,
       name: r'generatedImageHistoryProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final generatedImageHistoryProvider =
       allTransitiveDependencies: null,
     );
 
-typedef _$GeneratedImageHistory = AutoDisposeNotifier<List<String>>;
+typedef _$GeneratedImageHistory = Notifier<List<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

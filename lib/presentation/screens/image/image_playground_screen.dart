@@ -1,8 +1,12 @@
 // https://gist.github.com/Klerith/85fe516a31580bd2b9d6090002ee3d24
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gemini_app/presentation/providers/image/error_image_generated.dart';
 import 'package:gemini_app/presentation/providers/image/generated_images_provider.dart';
 import 'package:gemini_app/presentation/providers/image/is_generating_provider.dart';
+import 'package:gemini_app/presentation/providers/image/selected_art_provider.dart';
+import 'package:gemini_app/presentation/providers/image/selected_image_provider.dart';
+import 'package:gemini_app/presentation/widgets/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:gemini_app/config/theme/app_theme.dart';
@@ -14,10 +18,11 @@ const imageArtStyles = [
   'Dibujo a Lápiz',
   'Arte Digital',
   'Pintura al Óleo',
-  'Acuarela',
   'Dibujo al Carboncillo',
   'Ilustración Digital',
-  'Estilo Manga',
+  'Manga',
+  'Comic',
+  'Pixelart',
 ];
 
 class ImagePlaygroundScreen extends ConsumerWidget {
@@ -25,6 +30,17 @@ class ImagePlaygroundScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<String>(errorImageGeneratedProvider, (previous, next) {
+      if (next.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(next, style: TextStyle(color: Colors.white)),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: Text('Imágenes con Gemini')),
       backgroundColor: seedColor,
@@ -36,19 +52,38 @@ class ImagePlaygroundScreen extends ConsumerWidget {
           // Selector de estilo de arte
           ArtStyleSelector(),
           // Llenar el espacio
-          Expanded(child: Container()),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Gallery(),
+            ),
+          ),
           // Espacio para el prompt
           CustomBottomInput(
-            onSend: (partialText, {List<XFile> images = const []}) {
+            onSend: (partialText, {List<XFile> images = const []}) async {
               final generatedImageNotifier = ref.read(
                 generatedImagesProvider.notifier,
               );
+              final selectedStyle = ref.read(selectedArtStyleProvider);
+              // seleccionar imagen para editarla
+              final selectedImage = await ref
+                  .read(selectedImageProvider.notifier)
+                  .getXFile();
+              if (selectedImage != null) {
+                images.add(selectedImage);
+              }
 
+              String promptWithStyle = partialText;
               generatedImageNotifier.clearImages();
 
-              String prompt = partialText;
+              if (selectedStyle.isNotEmpty) {
+                promptWithStyle = '$partialText con estilo $selectedStyle';
+              }
 
-              generatedImageNotifier.generateImage(prompt, files: images);
+              generatedImageNotifier.generateImage(
+                promptWithStyle,
+                files: images,
+              );
             },
           ),
         ],
@@ -118,11 +153,13 @@ class GeneratedImage extends StatelessWidget {
   }
 }
 
-class ArtStyleSelector extends StatelessWidget {
+class ArtStyleSelector extends ConsumerWidget {
   const ArtStyleSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedArt = ref.watch(selectedArtStyleProvider);
+
     return SizedBox(
       height: 50,
       child: ListView.builder(
@@ -130,11 +167,17 @@ class ArtStyleSelector extends StatelessWidget {
         itemCount: imageArtStyles.length,
         itemBuilder: (context, index) {
           final style = imageArtStyles[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-            child: Chip(
-              label: Text(style),
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          final activeColor = selectedArt == style
+              ? Theme.of(context).colorScheme.primaryContainer
+              : null;
+
+          return GestureDetector(
+            onTap: () {
+              ref.read(selectedArtStyleProvider.notifier).setSelectedArt(style);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Chip(label: Text(style), backgroundColor: activeColor),
             ),
           );
         },
