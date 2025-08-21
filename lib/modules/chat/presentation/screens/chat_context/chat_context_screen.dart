@@ -5,12 +5,12 @@ import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gemini_app/config/theme/app_theme.dart';
-import 'package:gemini_app/presentation/providers/chat/basic_chat.dart';
-import 'package:gemini_app/presentation/providers/chat/chat_with_context.dart';
-import 'package:gemini_app/presentation/widgets/widgets.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/chat/basic_chat.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/chat/chat_with_context.dart';
+import 'package:gemini_app/modules/chat/presentation/widgets/widgets.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:gemini_app/presentation/providers/providers.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/providers.dart';
 
 class ChatContextScreen extends ConsumerStatefulWidget {
   const ChatContextScreen({super.key});

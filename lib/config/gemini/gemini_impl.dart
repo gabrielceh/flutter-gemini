@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:gemini_app/config/constants/enviroment.dart';
+import 'package:gemini_app/modules/pokemon_game/domain/domain.dart';
+import 'package:gemini_app/modules/pokemon_game/infraestructure/infraestructure.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GeminiImpl {
@@ -160,6 +162,28 @@ class GeminiImpl {
       return {'imageUrl': imageUrl, 'text': ''};
     } catch (e) {
       return {'imageUrl': '', 'text': 'Error al generar la imagen'};
+    }
+  }
+
+  // Pokemon game
+  Future<PokemonGame> getPokemonGame(String pokemonName) async {
+    final body = jsonEncode({'prompt': pokemonName});
+    try {
+      final response = await _dio.get(
+        '/pokemon-helper',
+        data: body,
+        options: Options(responseType: ResponseType.json),
+      );
+
+      final json = PokemonGameResponse.fromJson(response.data);
+      return PokemonGameMapper.pokemonGameToEntity(json);
+    } catch (e) {
+      return PokemonGame(
+        pokemonSelected: pokemonName,
+        pokedexNumber: 0,
+        pokemonList: [],
+        imgageUrl: '',
+      );
     }
   }
 }

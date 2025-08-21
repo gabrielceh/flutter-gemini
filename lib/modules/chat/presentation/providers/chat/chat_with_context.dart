@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gemini_app/config/gemini/gemini_impl.dart';
-import 'package:gemini_app/presentation/providers/users/user_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/users/user_provider.dart';
 
 part "chat_with_context.g.dart";
 

@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import 'package:gemini_app/presentation/screens/screens.dart';
+import 'package:gemini_app/modules/chat/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
   routes: [

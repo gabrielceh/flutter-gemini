@@ -1,16 +1,16 @@
 // https://gist.github.com/Klerith/85fe516a31580bd2b9d6090002ee3d24
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gemini_app/presentation/providers/image/error_image_generated.dart';
-import 'package:gemini_app/presentation/providers/image/generated_images_provider.dart';
-import 'package:gemini_app/presentation/providers/image/is_generating_provider.dart';
-import 'package:gemini_app/presentation/providers/image/selected_art_provider.dart';
-import 'package:gemini_app/presentation/providers/image/selected_image_provider.dart';
-import 'package:gemini_app/presentation/widgets/widgets.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/error_image_generated.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/generated_images_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/is_generating_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/selected_art_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/selected_image_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/widgets/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:gemini_app/config/theme/app_theme.dart';
-import 'package:gemini_app/presentation/widgets/chat/custom_bottom_input.dart';
+import 'package:gemini_app/modules/chat/presentation/widgets/chat/custom_bottom_input.dart';
 
 const imageArtStyles = [
   'Realista',

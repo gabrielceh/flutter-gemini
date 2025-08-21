@@ -1,10 +1,10 @@
 import 'package:gemini_app/config/gemini/gemini_impl.dart';
-import 'package:gemini_app/presentation/providers/image/error_image_generated.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/error_image_generated.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'package:gemini_app/presentation/providers/image/generated_history_provider.dart';
-import 'package:gemini_app/presentation/providers/image/is_generating_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/generated_history_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/is_generating_provider.dart';
 
 part 'generated_images_provider.g.dart';
 

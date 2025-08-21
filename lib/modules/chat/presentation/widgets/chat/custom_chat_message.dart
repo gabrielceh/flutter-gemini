@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_core/flutter_chat_core.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:gemini_app/presentation/widgets/chat/name_message.dart';
+import 'package:gemini_app/modules/chat/presentation/widgets/chat/name_message.dart';
 
 class CustomChatMessage extends StatelessWidget {
   final BuildContext context;

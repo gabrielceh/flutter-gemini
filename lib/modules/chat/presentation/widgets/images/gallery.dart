@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gemini_app/presentation/providers/image/generated_history_provider.dart';
-import 'package:gemini_app/presentation/providers/image/selected_image_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/generated_history_provider.dart';
+import 'package:gemini_app/modules/chat/presentation/providers/image/selected_image_provider.dart';
 
 class Gallery extends ConsumerWidget {
   const Gallery({super.key});
