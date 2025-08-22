@@ -31,7 +31,7 @@ class PokemonGameScreen extends ConsumerWidget {
             if (isGenerating) const CircularProgressIndicator(),
 
             if (!isGenerating && pokemonList.pokemonList.isNotEmpty)
-              PokemonGallery(),
+              Expanded(child: PokemonGallery()),
 
             if (!isGenerating && pokemonList.pokemonList.isEmpty)
               Text("No hay Pokémon"),

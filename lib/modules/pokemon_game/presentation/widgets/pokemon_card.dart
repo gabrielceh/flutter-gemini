@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gemini_app/config/helpers/text_capitalize.dart';
 import 'package:gemini_app/modules/pokemon_game/domain/domain.dart';
 import 'package:gemini_app/modules/pokemon_game/helpers/pokemon_type_color.dart';
 import 'package:gemini_app/modules/pokemon_game/helpers/pokemon_type_image.dart';
+
+import 'pokemon_card/footer_pokemon_card.dart';
+import 'pokemon_card/header_pokemon_card.dart';
 
 class PokemonCard extends StatelessWidget {
   final PokemonList pokemon;
@@ -38,18 +40,12 @@ class PokemonCard extends StatelessWidget {
                 spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    pokemon.name.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: PokemonTypeColor.getContrastColor(
-                        PokemonType.grass,
-                      ),
-                    ),
-                    textAlign: TextAlign.left,
+                  PokemonCardHeader(
+                    pokemonName: pokemon.name,
+                    pokedexNumber: pokemon.pokedexNumber,
+                    pokemonType: pokemon.types.first,
                   ),
-                  Image.network(pokemon.imgageUrl, width: 180, height: 180),
+                  Image.network(pokemon.imgageUrl, width: 160, height: 160),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -64,36 +60,7 @@ class PokemonCard extends StatelessWidget {
                         .toList(),
                   ),
 
-                  Column(
-                    spacing: 2.5,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Ataque efectivo:",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                      Text(
-                        textCapitalize(pokemon.attack.es),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                      Text(
-                        textCapitalize(pokemon.attack.en),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Colors.grey[900],
-                        ),
-                      ),
-                    ],
-                  ),
+                  FooterPokemonCard(pokemonAttack: pokemon.attack),
                 ],
               ),
             ),

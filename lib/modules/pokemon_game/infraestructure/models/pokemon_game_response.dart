@@ -29,13 +29,13 @@ class PokemonListResponse {
   final String name;
   final PokemonAttackResponse attack;
   final int pokedexNumber;
-  final List<String> tipes;
+  final List<String> types;
 
   PokemonListResponse({
     required this.name,
     required this.attack,
     required this.pokedexNumber,
-    required this.tipes,
+    required this.types,
   });
 
   factory PokemonListResponse.fromJson(Map<String, dynamic> json) =>
@@ -43,14 +43,14 @@ class PokemonListResponse {
         name: json["name"],
         attack: PokemonAttackResponse.fromJson(json["attack"]),
         pokedexNumber: json["pokedexNumber"],
-        tipes: List<String>.from(json["tipes"].map((x) => x)),
+        types: List<String>.from(json["types"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "attack": attack.toJson(),
     "pokedexNumber": pokedexNumber,
-    "tipes": List<dynamic>.from(tipes.map((x) => x)),
+    "types": List<dynamic>.from(types.map((x) => x)),
   };
 }
 
