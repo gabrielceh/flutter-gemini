@@ -23,6 +23,7 @@ class PokemonGameScreen extends ConsumerWidget {
           children: [
             CustomTextField(
               onSend: (pokemonName) async {
+                if (isGenerating) null;
                 ref
                     .read(pokemonListGameProvider.notifier)
                     .getPokemon(pokemonName);

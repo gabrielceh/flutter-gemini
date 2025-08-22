@@ -45,6 +45,7 @@ class PokemonCard extends StatelessWidget {
                     pokedexNumber: pokemon.pokedexNumber,
                     pokemonType: pokemon.types.first,
                   ),
+
                   Image.network(pokemon.imgageUrl, width: 160, height: 160),
 
                   Row(
@@ -86,7 +87,7 @@ class _SimplePokemonBackground extends StatelessWidget {
       top: top,
       left: -20,
       child: Container(
-        width: 200,
+        width: 350,
         height: 250,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),

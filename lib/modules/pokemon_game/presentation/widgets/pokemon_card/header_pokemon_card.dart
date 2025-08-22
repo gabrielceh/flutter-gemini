@@ -17,18 +17,24 @@ class PokemonCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 4,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           pokemonName.toUpperCase(),
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+            // fontSize: 15,
+            fontWeight: FontWeight.w700,
             color: PokemonTypeColor.getContrastColor(pokemonType),
           ),
           textAlign: TextAlign.left,
         ),
-        Text('# $pokedexNumber'),
+        Text(
+          '# $pokedexNumber',
+          style: TextStyle(
+            color: PokemonTypeColor.getContrastColor(pokemonType),
+          ),
+        ),
       ],
     );
   }

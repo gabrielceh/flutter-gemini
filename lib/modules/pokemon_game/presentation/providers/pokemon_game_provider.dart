@@ -31,7 +31,6 @@ class PokemonListGame extends _$PokemonListGame {
     final pokemonGame = await _pokemonGameRepository.getPokemonList(
       pokemonName,
     );
-    print('pokemonGame: ${pokemonGame.pokemonList[0].name}');
     state = pokemonGame;
     isGenerating.setIsNotGenerating();
   }
