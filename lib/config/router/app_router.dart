@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 
 import 'package:gemini_app/modules/chat/presentation/screens/screens.dart';
+import 'package:gemini_app/modules/home/presentation/screens/screens.dart';
+import 'package:gemini_app/modules/pokemon_game/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
   routes: [
@@ -16,6 +18,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/image-generation',
       builder: (context, state) => const ImagePlaygroundScreen(),
+    ),
+    GoRoute(
+      path: '/pokemon',
+      builder: (context, state) => const PokemonGameScreen(),
     ),
   ],
 );

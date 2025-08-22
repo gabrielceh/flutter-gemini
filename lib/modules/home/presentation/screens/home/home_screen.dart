@@ -39,6 +39,16 @@ class HomeScreen extends StatelessWidget {
             subtitle: Text('Generación de imágenes con gemini'),
             onTap: () => context.push('/image-generation'),
           ),
+
+          ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.red[600],
+              child: Icon(Icons.catching_pokemon_outlined),
+            ),
+            title: Text('Pokemon'),
+            subtitle: Text('Pokemon super efectivos'),
+            onTap: () => context.push('/pokemon'),
+          ),
         ],
       ),
     );
