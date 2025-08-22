@@ -24,7 +24,9 @@ class PokemonGameMapper {
               ),
               pokedexNumber: pokemon.pokedexNumber,
               imgageUrl: imageUrl(pokemon.pokedexNumber),
-              tipes: pokemon.tipes,
+              types: pokemon.tipes
+                  .map((type) => PokemonType.fromString(type)!)
+                  .toList(),
             ),
           )
           .toList(),

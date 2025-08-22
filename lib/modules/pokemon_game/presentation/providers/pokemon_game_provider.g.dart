@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'basic_chat.dart';
+part of 'pokemon_game_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$basicChatHash() => r'c38a6b2ccd98c4c0eeb9eed71849c29e573ba9e1';
+String _$pokemonListGameHash() => r'59d63195d2c9e92925dadcf252d2df59f3cbc4e9';
 
-/// See also [BasicChat].
-@ProviderFor(BasicChat)
-final basicChatProvider =
-    AutoDisposeNotifierProvider<BasicChat, List<Message>>.internal(
-      BasicChat.new,
-      name: r'basicChatProvider',
+/// See also [PokemonListGame].
+@ProviderFor(PokemonListGame)
+final pokemonListGameProvider =
+    AutoDisposeNotifierProvider<PokemonListGame, PokemonGame>.internal(
+      PokemonListGame.new,
+      name: r'pokemonListGameProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$basicChatHash,
+          : _$pokemonListGameHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$BasicChat = AutoDisposeNotifier<List<Message>>;
+typedef _$PokemonListGame = AutoDisposeNotifier<PokemonGame>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

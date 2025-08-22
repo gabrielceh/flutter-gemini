@@ -5,7 +5,6 @@ import 'package:uuid/uuid.dart';
 
 import 'package:gemini_app/config/gemini/gemini_impl.dart';
 import 'package:gemini_app/modules/chat/presentation/providers/users/user_provider.dart';
-import 'package:gemini_app/modules/chat/presentation/providers/chat/is_gemini_typing.dart';
 
 part "basic_chat.g.dart";
 
@@ -83,20 +82,20 @@ class BasicChat extends _$BasicChat {
     );
   }
 
-  Future<void> _geminiTextResponse({
-    required String prompt,
-    required InMemoryChatController chatController,
-  }) async {
-    await _toggleTyping(chatController);
-    // await Future.delayed(const Duration(seconds: 1));
-    final response = await _gemini.getResponse(prompt);
-    await _createTextMessage(
-      text: response,
-      author: geminiUser,
-      chatController: chatController,
-    );
-    await _toggleTyping(chatController);
-  }
+  // Future<void> _geminiTextResponse({
+  //   required String prompt,
+  //   required InMemoryChatController chatController,
+  // }) async {
+  //   await _toggleTyping(chatController);
+  //   // await Future.delayed(const Duration(seconds: 1));
+  //   final response = await _gemini.getResponse(prompt);
+  //   await _createTextMessage(
+  //     text: response,
+  //     author: geminiUser,
+  //     chatController: chatController,
+  //   );
+  //   await _toggleTyping(chatController);
+  // }
 
   Future<void> _geminiTextResponseStream({
     required String prompt,
@@ -125,33 +124,33 @@ class BasicChat extends _$BasicChat {
 
   // HELPER METHODS
 
-  Future<void> _toggleTyping(InMemoryChatController chatController) async {
-    final isGeminiTyping = ref.watch(isGeminiTypingProvider.notifier).state;
+  // Future<void> _toggleTyping(InMemoryChatController chatController) async {
+  //   final isGeminiTyping = ref.watch(isGeminiTypingProvider.notifier).state;
 
-    if (!isGeminiTyping) {
-      // añadimos un mensaje custom que sera el "typing"
-      await chatController.insertMessage(
-        CustomMessage(
-          id: 'typing-${uuid.v4()}',
-          authorId: ref.watch(geminiUserProvider).id,
-          metadata: {'type': 'typing'},
-          createdAt: DateTime.now().toUtc(),
-        ),
-      );
-      ref.read(isGeminiTypingProvider.notifier).setIsTyping();
-    } else {
-      try {
-        final typingMessage = chatController.messages.firstWhere(
-          (message) => message.metadata?['type'] == 'typing',
-        );
-        ref.read(isGeminiTypingProvider.notifier).setIsNotTyping();
-        await chatController.removeMessage(typingMessage, animated: false);
-      } catch (e) {
-        ref.read(isGeminiTypingProvider.notifier).setIsNotTyping();
-        await _toggleTyping(chatController);
-      }
-    }
-  }
+  //   if (!isGeminiTyping) {
+  //     // añadimos un mensaje custom que sera el "typing"
+  //     await chatController.insertMessage(
+  //       CustomMessage(
+  //         id: 'typing-${uuid.v4()}',
+  //         authorId: ref.watch(geminiUserProvider).id,
+  //         metadata: {'type': 'typing'},
+  //         createdAt: DateTime.now().toUtc(),
+  //       ),
+  //     );
+  //     ref.read(isGeminiTypingProvider.notifier).setIsTyping();
+  //   } else {
+  //     try {
+  //       final typingMessage = chatController.messages.firstWhere(
+  //         (message) => message.metadata?['type'] == 'typing',
+  //       );
+  //       ref.read(isGeminiTypingProvider.notifier).setIsNotTyping();
+  //       await chatController.removeMessage(typingMessage, animated: false);
+  //     } catch (e) {
+  //       ref.read(isGeminiTypingProvider.notifier).setIsNotTyping();
+  //       await _toggleTyping(chatController);
+  //     }
+  //   }
+  // }
 
   Future<void> _createTextMessage({
     required String text,

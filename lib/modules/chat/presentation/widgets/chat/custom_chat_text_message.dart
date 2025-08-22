@@ -26,8 +26,6 @@ class CustomChatTextMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     final borderRadiusMe = BorderRadius.only(
       bottomLeft: Radius.circular(12),
       topLeft: Radius.circular(12),

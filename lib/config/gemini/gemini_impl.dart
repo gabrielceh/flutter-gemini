@@ -167,9 +167,9 @@ class GeminiImpl {
 
   // Pokemon game
   Future<PokemonGame> getPokemonGame(String pokemonName) async {
-    final body = jsonEncode({'prompt': pokemonName});
+    final body = jsonEncode({'name': pokemonName});
     try {
-      final response = await _dio.get(
+      final response = await _dio.post(
         '/pokemon-helper',
         data: body,
         options: Options(responseType: ResponseType.json),
@@ -180,7 +180,7 @@ class GeminiImpl {
     } catch (e) {
       return PokemonGame(
         pokemonSelected: pokemonName,
-        pokedexNumber: 0,
+        pokedexNumber: -1,
         pokemonList: [],
         imgageUrl: '',
       );

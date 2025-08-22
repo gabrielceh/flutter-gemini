@@ -39,3 +39,4 @@ flutter:
 
   assets:
     - .env
+    - assets/images/pokemon_types/

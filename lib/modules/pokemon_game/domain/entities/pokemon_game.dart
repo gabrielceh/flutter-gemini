@@ -1,3 +1,5 @@
+import 'package:gemini_app/modules/pokemon_game/domain/entities/pokemon_type_enum.dart';
+
 class PokemonGame {
   String pokemonSelected;
   int pokedexNumber;
@@ -17,14 +19,14 @@ class PokemonList {
   PokemonAttack attack;
   int pokedexNumber;
   String imgageUrl;
-  List<String> tipes;
+  List<PokemonType> types;
 
   PokemonList({
     required this.name,
     required this.attack,
     required this.pokedexNumber,
     required this.imgageUrl,
-    required this.tipes,
+    required this.types,
   });
 }
 
